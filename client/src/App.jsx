@@ -13,5 +13,5 @@ const App = () => {
     </div>
   );
 };
-
+// is this valid to modify the whole game
 export default App;
