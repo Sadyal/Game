@@ -1,8 +1,10 @@
-// Manage Ludo rooms and game state in memory (for simplicity and speed)
-// For a production app, use Redis or MongoDB for state persistence.
+// In-memory room storage (for demo)
+// Production → use Redis / DB
 const rooms = {};
 
 const handleGameSockets = (io, socket) => {
+
+  // 🟢 JOIN ROOM
   socket.on('join_room', (roomId) => {
     socket.join(roomId);
 
@@ -10,58 +12,85 @@ const handleGameSockets = (io, socket) => {
       rooms[roomId] = {
         players: [],
         gameState: {
-          turn: 0, // Player Index
+          turn: 0,
           diceValue: 1,
-          tokens: {} // Map of player index to token positions
+          tokens: {}
         }
       };
     }
 
-    // Assign player colors: 0=Red, 1=Green, 2=Yellow, 3=Blue
-    const playerIndex = rooms[roomId].players.length;
+    const room = rooms[roomId];
+
+    // Assign player (max 4)
+    const playerIndex = room.players.length;
+
     if (playerIndex < 4) {
-      rooms[roomId].players.push({ id: socket.id, index: playerIndex });
-      
-      // Initialize basic token data for this player
-      rooms[roomId].gameState.tokens[playerIndex] = [0, 0, 0, 0]; // 4 tokens starting at position 0
+      room.players.push({
+        id: socket.id,
+        index: playerIndex
+      });
+
+      // Initialize tokens
+      room.gameState.tokens[playerIndex] = [0, 0, 0, 0];
+
+      console.log(`Player ${playerIndex} joined room ${roomId}`);
     }
 
-    io.to(roomId).emit('room_update', rooms[roomId]);
+    io.to(roomId).emit('room_update', room);
   });
 
+
+  // 🎲 ROLL DICE
   socket.on('roll_dice', ({ roomId }) => {
-    if (rooms[roomId]) {
-      // Logic: Roll dice 1-6
-      const roll = Math.floor(Math.random() * 6) + 1;
-      rooms[roomId].gameState.diceValue = roll;
-      
-      // Simple implementation: move first token for demonstration
-      io.to(roomId).emit('dice_rolled', { roll, gameState: rooms[roomId].gameState });
-    }
+    const room = rooms[roomId];
+    if (!room) return;
+
+    const roll = Math.floor(Math.random() * 6) + 1;
+
+    room.gameState.diceValue = roll;
+
+    console.log(`🎲 Dice rolled: ${roll} in room ${roomId}`);
+
+    io.to(roomId).emit('dice_rolled', {
+      roll,
+      gameState: room.gameState
+    });
   });
 
+
+  // 🚶 MOVE TOKEN
   socket.on('move_token', ({ roomId, playerIndex, tokenIndex }) => {
-    if (rooms[roomId]) {
-      const state = rooms[roomId].gameState;
-      // Demo logic: just advance token by dice value
-      state.tokens[playerIndex][tokenIndex] += state.diceValue;
-      
-      // Cycle turn
-      state.turn = (state.turn + 1) % rooms[roomId].players.length;
+    const room = rooms[roomId];
+    if (!room) return;
 
-      io.to(roomId).emit('state_update', state);
-    }
+    const state = room.gameState;
+
+    // Move token
+    state.tokens[playerIndex][tokenIndex] += state.diceValue;
+
+    // Next turn
+    state.turn = (state.turn + 1) % room.players.length;
+
+    console.log(`➡️ Player ${playerIndex} moved token ${tokenIndex}`);
+
+    io.to(roomId).emit('state_update', state);
   });
 
+
+  // ❌ DISCONNECT
   socket.on('disconnect', () => {
-    console.log(`User disconnected: ${socket.id}`);
-    // Clean up rooms if empty (simple logic)
+    console.log(`❌ User disconnected: ${socket.id}`);
+
     for (const roomId in rooms) {
-      rooms[roomId].players = rooms[roomId].players.filter(p => p.id !== socket.id);
-      if (rooms[roomId].players.length === 0) {
+      const room = rooms[roomId];
+
+      room.players = room.players.filter(p => p.id !== socket.id);
+
+      if (room.players.length === 0) {
         delete rooms[roomId];
+        console.log(`🧹 Room deleted: ${roomId}`);
       } else {
-        io.to(roomId).emit('room_update', rooms[roomId]);
+        io.to(roomId).emit('room_update', room);
       }
     }
   });
