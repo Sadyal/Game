@@ -1,165 +1,244 @@
 .roomContainer {
-  min-height: 100vh;
-  padding: var(--spacing-4);
-  background-image: radial-gradient(circle at 10% 20%, var(--bg-secondary), var(--bg-primary));
+  padding: 20px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
 .topBar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--spacing-4);
-  background: var(--bg-panel);
-  border: var(--glass-border);
-  border-radius: var(--radius-lg);
-  margin-bottom: var(--spacing-6);
+  margin-bottom: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 15px 30px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
   backdrop-filter: blur(10px);
 }
 
-.playersList {
-  display: flex;
-  gap: var(--spacing-3);
+.topBar h2 {
+  margin: 0;
 }
 
-.playerBadge {
-  padding: var(--spacing-2) var(--spacing-4);
-  border-radius: var(--radius-full);
-  font-weight: 600;
-  font-size: 0.875rem;
-  color: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+.highScoreBadge {
+  background: linear-gradient(135deg, #ffcc00 0%, #ff6600 100%);
+  color: #000;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-family: var(--mono);
+  box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
 }
-
-.playerColor0 { background: var(--player-red); }
-.playerColor1 { background: var(--player-green); }
-.playerColor2 { background: var(--player-yellow); }
-.playerColor3 { background: var(--player-blue); }
 
 .gameLayout {
   display: flex;
-  gap: var(--spacing-8);
-  justify-content: center;
+  gap: 30px;
+  flex: 1;
   align-items: flex-start;
-  flex-wrap: wrap;
-}
-
-.sidePanel {
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-4);
-}
-
-.diceDisplay {
-  font-size: 4rem;
-  font-weight: 800;
-  padding: var(--spacing-4);
-  background: rgba(0,0,0,0.2);
-  border-radius: var(--radius-lg);
-  margin: var(--spacing-4) 0;
-  color: var(--accent-primary);
-  text-shadow: 0 0 20px var(--accent-primary-glow);
-  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.rollBtn {
-  width: 100%;
-  background: var(--accent-secondary);
-  color: white;
-  padding: var(--spacing-3);
-  border-radius: var(--radius-md);
-  font-weight: 700;
-  font-size: 1.25rem;
-  text-transform: uppercase;
-  transition: all 0.2s;
-  box-shadow: 0 4px 15px var(--accent-secondary-glow);
-}
-
-.rollBtn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  background: var(--accent-secondary);
-  filter: brightness(1.2);
-}
-
-.rollBtn:disabled {
-  background: var(--bg-secondary);
-  color: var(--text-muted);
-  box-shadow: none;
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-.loadingContainer {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  gap: var(--spacing-4);
-  color: var(--text-muted);
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-.loader {
-  width: 40px;
-  height: 40px;
-  border: 4px solid var(--bg-secondary);
-  border-top-color: var(--accent-primary);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+.boardSection {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 600px;
+  width: 100%;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes popIn {
-  0% { transform: scale(0.8); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+.relativeWrapper {
+  position: relative;
+  width: 100%;
 }
 
 .overlay {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(15, 23, 42, 0.85); /* Dark background matching our theme */
-  backdrop-filter: blur(8px);
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(5px);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  z-index: 100;
-  border-radius: var(--radius-lg);
-  color: var(--text-primary);
+  justify-content: center;
+  border-radius: 12px;
+  z-index: 20;
+}
+
+.finalScores {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  min-width: 250px;
+}
+
+.finalScoreRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.5rem;
+}
+
+.sidePanel {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.scoreboard {
+  padding: 20px;
+  text-align: left;
+}
+
+.scoreboard h3 {
+  margin-top: 0;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.difficultySection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.difficultySelect {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
+  color: white;
+  font-family: var(--sans);
+  font-size: 1rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.difficultySelect:focus {
+  border-color: var(--accent);
+}
+
+.difficultySelect option {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.scoreList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.scoreCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.myScore {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.scoreInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.playerName {
+  font-weight: 500;
+}
+
+.scoreValue {
+  font-family: var(--mono);
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.playerIndicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.color0 { background-color: #00ffcc; box-shadow: 0 0 8px #00ffcc; }
+
+.controlsHelp {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
   text-align: center;
 }
 
-.overlay h2 {
-  font-size: 2.5rem;
-  margin-bottom: var(--spacing-4);
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+.controlsHelp h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: var(--text);
 }
 
-.overlay p {
-  font-size: 1.25rem;
-  color: var(--text-muted);
-  margin-bottom: var(--spacing-6);
-}
-
-.waitingSpinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid rgba(255, 255, 255, 0.1);
-  border-top-color: var(--accent-primary);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  box-shadow: 0 0 15px var(--accent-primary-glow);
-}
-
-.relativeWrapper {
-  position: relative;
-  width: 100%;
+.keys {
   display: flex;
   justify-content: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.keyBadge {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  box-shadow: 0 2px 0 rgba(255,255,255,0.2);
+}
+
+.primaryBtn {
+  background: linear-gradient(135deg, var(--accent) 0%, #ff00ff 100%);
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px var(--accent-border);
+}
+
+.primaryBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--accent-border);
+}
+
+@media (max-width: 900px) {
+  .gameLayout {
+    flex-direction: column;
+    align-items: center;
+  }
+  .sidePanel {
+    width: 100%;
+    max-width: 600px;
+  }
 }

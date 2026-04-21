@@ -1,17 +1,17 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import GameRoom from './pages/GameRoom';
+import Game from './pages/Game';
 
 const App = () => {
   return (
     <div className="app-container">
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/room/:roomId" element={<GameRoom />} />
+        <Route path="/game" element={<Game />} />
       </Routes>
     </div>
   );
 };
-// is this valid to modify the whole game
+
 export default App;

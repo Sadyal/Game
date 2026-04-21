@@ -7,7 +7,7 @@ export const useGameSocket = (roomId) => {
   const [gameState, setGameState] = useState(null);
   const [roomData, setRoomData] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [rollResult, setRollResult] = useState(null);
+  const [myPlayerIndex, setMyPlayerIndex] = useState(null);
   
   const socketRef = useRef(null);
 
@@ -25,15 +25,15 @@ export const useGameSocket = (roomId) => {
     socketRef.current.on('room_update', (data) => {
       setRoomData(data);
       setGameState(data.gameState);
+      // Determine my player index
+      const me = data.players.find(p => p.id === socketRef.current.id);
+      if (me) {
+        setMyPlayerIndex(me.index);
+      }
     });
 
-    socketRef.current.on('state_update', (data) => {
+    socketRef.current.on('game_tick', (data) => {
       setGameState(data);
-    });
-
-    socketRef.current.on('dice_rolled', (data) => {
-      setRollResult(data.roll);
-      setGameState(data.gameState);
     });
 
     socketRef.current.on('disconnect', () => {
@@ -45,15 +45,25 @@ export const useGameSocket = (roomId) => {
     };
   }, [roomId]);
 
-  const rollDice = () => {
+  const startGame = () => {
     if (socketRef.current && isConnected) {
-      socketRef.current.emit('roll_dice', { roomId });
+      socketRef.current.emit('start_game', { roomId });
     }
   };
 
-  const moveToken = (playerIndex, tokenIndex) => {
+  const restartGame = () => {
     if (socketRef.current && isConnected) {
-      socketRef.current.emit('move_token', { roomId, playerIndex, tokenIndex });
+      socketRef.current.emit('restart_game', { roomId });
+    }
+  };
+
+  const changeDirection = (direction) => {
+    if (socketRef.current && isConnected && myPlayerIndex !== null) {
+      socketRef.current.emit('change_direction', { 
+        roomId, 
+        playerIndex: myPlayerIndex, 
+        direction 
+      });
     }
   };
 
@@ -62,8 +72,9 @@ export const useGameSocket = (roomId) => {
     socket: socketRef.current,
     roomData,
     gameState,
-    rollResult,
-    rollDice,
-    moveToken
+    myPlayerIndex,
+    startGame,
+    restartGame,
+    changeDirection
   };
 };
