@@ -1,0 +1,128 @@
+.homeContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-4);
+  background-image: radial-gradient(circle at 50% 0%, var(--bg-secondary), var(--bg-primary));
+}
+
+.menuCard {
+  padding: var(--spacing-8);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.menuCard h1 {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-1);
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.primaryBtn {
+  background: var(--accent-primary);
+  color: white;
+  padding: var(--spacing-3) var(--spacing-6);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 1.125rem;
+  box-shadow: 0 4px 14px 0 var(--accent-primary-glow);
+  transition: all 0.2s ease;
+}
+
+.primaryBtn:hover {
+  background: var(--accent-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 0 var(--accent-primary-glow);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.divider::before, .divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--glass-border);
+}
+
+.divider span {
+  padding: 0 var(--spacing-3);
+}
+
+.joinForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.inputField {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--spacing-3);
+  border-radius: var(--radius-md);
+  color: white;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.inputField:focus {
+  outline: none;
+  border-color: var(--accent-secondary);
+  box-shadow: 0 0 0 2px var(--accent-secondary-glow);
+}
+
+.secondaryBtn {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  padding: var(--spacing-3) var(--spacing-6);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+
+.secondaryBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.secondaryBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
